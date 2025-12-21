@@ -461,12 +461,12 @@ Storage	500 MB free space	1 GB free space
 Processor	x86-64 compatible	Modern multicore CPU
 Option 1: Pre-built Executable (Recommended for Windows). Because the size exceeds 25Mb You can download the whole folder from my Google Drive:
 
-https://drive.google.com/file/d/17ZKDp2sPPV7zmGDpFsWHtVzUA7fczhCJ/view?usp=sharing
+https://drive.google.com/file/d/1dFJH1MqBW7UWrXs1hd8o07R9B_1LaL-j/view?usp=sharing
 
 # Windows (PowerShell): Verify SHA-256 checksum
 ```powewrshell
-Get-FileHash .\kyber1024.exe -Algorithm SHA256
-# Expected: SHA256 AD8A61F494B444895431686402F511C14A0EA04AD42CA2DB3717BE2228F90F78
+Get-FileHash .\Kyber1024-Suite.exe -Algorithm SHA256
+# Expected: SHA256          E8AD4D07C95198499C59E26053257A8AFEAB9F27152DB526F61676B462FA5AA6
 ```
 
 Build Your Own Executable
@@ -477,6 +477,7 @@ If you prefer to build from the source code:
 pip install pyinstaller
 
 # Step 1: Install build dependencies
+
 pip install -r requirements.txt
 
 # Step 2: Build with all hidden imports
@@ -490,8 +491,9 @@ pyinstaller --onefile --windowed `
   --hidden-import "PyQt6.QtCore" `
   --hidden-import "PyQt6.QtGui" `
   --hidden-import "PyQt6.QtWidgets" `
-  --collect-all "pywin32" `
   kyber1024.py
+
+# Note: --collect-all "pywin32" is NOT needed - PyInstaller handles it automatically
 
 # Step 3: Verify the build
 .\dist\Kyber1024-Suite.exe --help
