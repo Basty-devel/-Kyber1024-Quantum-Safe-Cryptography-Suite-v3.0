@@ -748,8 +748,8 @@ brew install python@3.10 openssl
 Clone and Setup:
 bash
 # Clone repository with submodules
-git clone --recursive https://github.com/yourusername/kyber1024-suite.git
-cd kyber1024-suite
+git clone --recursive https://github.com/Basty-devel/-Kyber1024-Quantum-Safe-Cryptography-Suite-v3.0.git
+cd -Kyber1024-Quantum-Safe-Cryptography-Suite-v3.0
 
 # Create development environment
 python -m venv dev_env
@@ -765,11 +765,19 @@ Windows (PyInstaller):
 # Install PyInstaller
 pip install pyinstaller
 
-# Build executable
-pyinstaller --onefile --windowed ^
-  --name "Kyber1024-Suite" ^
-  --icon "kybersec.ico" ^
-  --add-data "kybersec.png;." ^
+# Install requirements
+pip install -r requirements.txt
+
+pyinstaller --onefile --windowed --clean `
+  --name "Kyber1024-Suite" `
+  --icon "kybersec.ico" `
+  --add-data "kybersec.png;." `
+  --hidden-import "oqs" `
+  --hidden-import "cryptography" `
+  --hidden-import "appdirs" `
+  --hidden-import "PyQt6.QtCore" `
+  --hidden-import "PyQt6.QtGui" `
+  --hidden-import "PyQt6.QtWidgets" `
   kyber1024.py
 
 # Output will be in dist/Kyber1024-Suite.exe
