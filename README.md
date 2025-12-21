@@ -459,123 +459,16 @@ Python Version	3.8	3.10+
 RAM	4 GB	8 GB
 Storage	500 MB free space	1 GB free space
 Processor	x86-64 compatible	Modern multicore CPU
-Option 1: Pre-built Executable (Recommended for Windows). Because the size exceeds 25Mb You can download the whole folder from my Google Drive:
 
-https://drive.google.com/file/d/1dFJH1MqBW7UWrXs1hd8o07R9B_1LaL-j/view?usp=sharing
+## 🚀 Quick Installation
 
-# Windows (PowerShell): Verify SHA-256 checksum
-```powewrshell
-Get-FileHash .\Kyber1024-Suite.exe -Algorithm SHA256
-# Expected: SHA256          E8AD4D07C95198499C59E26053257A8AFEAB9F27152DB526F61676B462FA5AA6
-```
-
-Build Your Own Executable
-If you prefer to build from the source code:
-
-```powershell
-# Install build tool
-pip install pyinstaller
-
-# Step 1: Install build dependencies
-
-pip install -r requirements.txt
-
-# Step 2: Build with all hidden imports
-pyinstaller --onefile --windowed `
-  --name "Kyber1024-Suite" `
-  --icon "kybersec.ico" `
-  --add-data "kybersec.png;." `
-  --hidden-import "oqs" `
-  --hidden-import "cryptography" `
-  --hidden-import "appdirs" `
-  --hidden-import "PyQt6.QtCore" `
-  --hidden-import "PyQt6.QtGui" `
-  --hidden-import "PyQt6.QtWidgets" `
-  kyber1024.py
-
-# Note: --collect-all "pywin32" is NOT needed - PyInstaller handles it automatically
-
-# Step 3: Verify the build
-.\dist\Kyber1024-Suite.exe --help
-```
-
-Quick Installation:
-```powershell
-# 1. Download the latest release
-# 2. Run the installer or executable from 'dist' folder
-.\dist\kyber1024.exe
-
-# 3. First-time setup will create configuration directory
-#    C:\Users\[Username]\AppData\Local\KyberVault\KyberCryptographySuite
-```
-Silent Installation (Enterprise):
-```powershell
-# Deploy across enterprise with group policy
-.\kyber1024.exe /S /D="C:\Program Files\KyberSuite"
-
-# Verify installation
-Get-Item "C:\Program Files\KyberSuite\kyber1024.exe" | 
-    Get-AuthenticodeSignature | 
-    Format-List
-```
-Option 2: Install from Source (All Platforms)
-Step-by-Step Installation:
+### **One-Line Install (All Platforms):**
 ```bash
-# 1. Clone the repository
-git clone https://github.com/Basty-devel/-Kyber1024-Quantum-Safe-Cryptography-Suite-v3.0.git
-cd -Kyber1024-Quantum-Safe-Cryptography-Suite-v3.0
-
-# 2. Create and activate virtual environment (recommended)
-python -m venv venv
-
-# Windows:
-venv\Scripts\activate
-# Linux/macOS:
-source venv/bin/activate
-
-# 3. Install dependencies
-pip install -r requirements.txt
-
-# 4. Verify installation
-python -c "
-import oqs
-print(f'✅ liboqs version: {oqs.__version__}')
-print(f'✅ Kyber algorithms: {[alg for alg in oqs.get_enabled_KEM_mechanisms() if 'Kyber' in alg]}')
-"
-
-# 5. Run the application
-python kyber1024.py
-Option 3: Platform-Specific Packages
-Windows (Advanced):
-powershell
-# Install with Chocolatey (package manager)
-choco install -Kyber1024-Quantum-Safe-Cryptography-Suite-v3.0
-
-# Or with Winget
-winget install KyberVault.Kyber1024Suite
-
-# Verify system integration
-Get-Command kyber1024
-Linux (Ubuntu/Debian):
-bash
-# Add repository and install
-sudo apt update
-sudo apt install software-properties-common
-sudo add-apt-repository ppa:kybervault/kyber-suite
-sudo apt update
-sudo apt install kyber1024-suite
-
-# Launch application
-kyber1024
-macOS:
-bash
-# Install via Homebrew
-brew tap kybervault/kyber
-brew install kyber1024-suite
-
-# Or download DMG from releases
-open kyber1024-suite.dmg
+# Copy and paste this single command:
+bash <(curl -s https://raw.githubusercontent.com/Basty-devel/-Kyber1024-Quantum-Safe-Cryptography-Suite-v3.0/main/install.sh) || powershell -c "irm https://raw.githubusercontent.com/Basty-devel/-Kyber1024-Quantum-Safe-Cryptography-Suite-v3.0/main/install.ps1 | iex"
 ```
+
+
 Dependency Details
 The application requires the following Python packages:
 
