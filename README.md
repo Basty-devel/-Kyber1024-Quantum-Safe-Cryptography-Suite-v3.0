@@ -459,7 +459,44 @@ Python Version	3.8	3.10+
 RAM	4 GB	8 GB
 Storage	500 MB free space	1 GB free space
 Processor	x86-64 compatible	Modern multicore CPU
-Option 1: Pre-built Executable (Recommended for Windows)
+Option 1: Pre-built Executable (Recommended for Windows). Because the size exceeds 25Mb You can download the whole folder from my Google Drive:
+
+https://drive.google.com/file/d/17ZKDp2sPPV7zmGDpFsWHtVzUA7fczhCJ/view?usp=sharing
+
+# Windows (PowerShell): Verify SHA-256 checksum
+```powewrshell
+Get-FileHash .\kyber1024.exe -Algorithm SHA256
+# Expected: SHA256 AD8A61F494B444895431686402F511C14A0EA04AD42CA2DB3717BE2228F90F78
+```
+
+Build Your Own Executable
+If you prefer to build from the source code:
+
+```powershell
+# Install build tool
+pip install pyinstaller
+
+# Step 1: Install build dependencies
+pip install -r requirements.txt
+
+# Step 2: Build with all hidden imports
+pyinstaller --onefile --windowed `
+  --name "Kyber1024-Suite" `
+  --icon "kybersec.ico" `
+  --add-data "kybersec.png;." `
+  --hidden-import "oqs" `
+  --hidden-import "cryptography" `
+  --hidden-import "appdirs" `
+  --hidden-import "PyQt6.QtCore" `
+  --hidden-import "PyQt6.QtGui" `
+  --hidden-import "PyQt6.QtWidgets" `
+  --collect-all "pywin32" `
+  kyber1024.py
+
+# Step 3: Verify the build
+.\dist\Kyber1024-Suite.exe --help
+```
+
 Quick Installation:
 ```powershell
 # 1. Download the latest release
@@ -483,8 +520,8 @@ Option 2: Install from Source (All Platforms)
 Step-by-Step Installation:
 ```bash
 # 1. Clone the repository
-git clone https://github.com/yourusername/kyber1024-suite.git
-cd kyber1024-suite
+git clone https://github.com/Basty-devel/-Kyber1024-Quantum-Safe-Cryptography-Suite-v3.0.git
+cd -Kyber1024-Quantum-Safe-Cryptography-Suite-v3.0
 
 # 2. Create and activate virtual environment (recommended)
 python -m venv venv
@@ -510,7 +547,7 @@ Option 3: Platform-Specific Packages
 Windows (Advanced):
 powershell
 # Install with Chocolatey (package manager)
-choco install kyber1024-suite
+choco install -Kyber1024-Quantum-Safe-Cryptography-Suite-v3.0
 
 # Or with Winget
 winget install KyberVault.Kyber1024Suite
