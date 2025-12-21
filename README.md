@@ -1187,7 +1187,7 @@ Email: Sebastian.Nestler@tutanota.de
 
 Security Issues: Sebastian.Nestler@tutanota.de (PGP encrypted preferred)
 
-GitHub: https://github.com/Basti-devel/-Kyber1024-Quantum-Safe-Cryptography-Suite-v3.0
+GitHub: https://github.com/Basty-devel/-Kyber1024-Quantum-Safe-Cryptography-Suite-v3.0
 
 ## Planned Features (v3.1 - v4.0):
 v3.1 (Q2 2024):
@@ -1255,6 +1255,5 @@ Export Control:
 This software may be subject to export control regulations. Users are
 responsible for complying with all applicable export control laws and
 regulations, including those of the United States and other countries.
+```
 # 🔐 Protect Your Digital Future Today - Deploy Quantum-Safe Cryptography Before It's Too Late
-regulations, including those of the United States and other countries.
-🔐 Protect Your Digital Future Today - Deploy Quantum-Safe Cryptography Before It's Too Late
