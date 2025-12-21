@@ -19,330 +19,7 @@
 
 Industry-Grade Post-Quantum Cryptography Implementation with NIST-Standardized Kyber-1024 and Defense-in-Depth Symmetric Encryption
 
-📋 Table of Contents
-Executive Summary
-
-Quantum Threat Analysis
-
-Technical Architecture
-
-Security Features
-
-Installation Guide
-
-Usage Guide
-
-Building from Source
-
-Security Considerations
-
-License
-
-Acknowledgements
-
-🚀 Executive Summary
-The Kyber1024 Quantum-Safe Cryptography Suite is a production-ready, cross-platform application implementing NIST-standardized post-quantum cryptography for long-term data protection. This toolkit provides:
-
-NIST PQC Standard Kyber-1024 for quantum-resistant key exchange (256-bit security)
-
-AES-256 + ChaCha20-Poly1305 cascade for ~256-bit quantum security in symmetric encryption
-
-Crypto-agility framework for seamless future algorithm migration
-
-Professional GUI with cross-platform support (Windows, Linux, macOS)
-
-50+ year lifespan design against quantum computing threats
-
-⚛️ Quantum Threat Analysis
-🔍 Grover's Algorithm: The Symmetric Cryptography Threat
-Grovers Algorithm poses the most significant quantum threat to symmetric encryption. While Shor's algorithm breaks RSA/ECC in polynomial time, Grover's provides a quadratic speedup for brute-force attacks:
-
-Mathematical Impact:
-Classical Security: AES-256 provides 2²⁵⁶ operations for brute force
-
-Quantum Security (Grover): √(2²⁵⁶) = 2¹²⁸ operations required
-
-Result: AES-256's effective security drops from 256-bit to 128-bit against quantum attacks
-
-Our Defense Strategy:
-text
-AES-256-GCM (256-bit classical) → 128-bit quantum security
-ChaCha20-Poly1305 (256-bit classical) → 128-bit quantum security
-CASCADE (AES+ChaCha) → ~256-bit quantum security via defense-in-depth
-⚠️ Harvest-Now Decrypt-Later (HNDL) Attacks
-HNDL attacks represent the most insidious quantum threat facing organizations today:
-
-The Attack Vector:
-Harvest Phase (Today): Adversaries collect encrypted data using classical interception methods
-
-Storage Phase: Encrypted data is archived for extended periods (years/decades)
-
-Decrypt Phase (Future): When quantum computers become available, stored data is decrypted
-
-Real-World Impact:
-Intelligence Agencies: Currently harvesting diplomatic, military, and commercial communications
-
-Corporate Espionage: Trade secrets and intellectual property being stockpiled
-
-Medical Data: Patient records with 70+ year confidentiality requirements
-
-Financial Data: Long-term transaction records and banking communications
-
-Our Protection Framework:
-python
-# Crypto-agility framework enables future algorithm upgrades
-class AlgorithmIdentifier:
-    family: str  # "post-quantum", "symmetric", "hash"
-    name: str    # Algorithm name
-    version: str  # Version for tracking
-    security_level: int  # Bits of security
-    quantum_safe: bool
-    recommended: bool
-    deprecated: bool = False
-    deprecation_date: Optional[str] = None
-🏗️ Technical Architecture
-🛡️ Multi-Layer Security Architecture
-text
-┌─────────────────────────────────────────────────────────────┐
-│                    Application Layer                         │
-│  ┌─────────────────────────────────────────────────────┐    │
-│  │              PyQt6 GUI Interface                     │    │
-│  └─────────────────────────────────────────────────────┘    │
-├─────────────────────────────────────────────────────────────┤
-│                    Crypto-Agility Framework                  │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐        │
-│  │ Algorithm   │  │ Migration   │  │ Registry    │        │
-│  │ Registry    │  │ Tracking    │  │ Management  │        │
-│  └─────────────┘  └─────────────┘  └─────────────┘        │
-├─────────────────────────────────────────────────────────────┤
-│              Quantum-Safe Cryptographic Engine              │
-│  ┌─────────────────────────────────────────────────────┐    │
-│  │  Layer 1: Kyber-1024 KEM (NIST Standard)            │    │
-│  │  • 256-bit post-quantum security                    │    │
-│  │  • Key Encapsulation Mechanism                      │    │
-│  └─────────────────────────────────────────────────────┘    │
-│  ┌─────────────────────────────────────────────────────┐    │
-│  │  Layer 2: AES-256-GCM (NIST Standard)               │    │
-│  │  • 256-bit classical security                       │    │
-│  │  • Authenticated encryption                         │    │
-│  └─────────────────────────────────────────────────────┘    │
-│  ┌─────────────────────────────────────────────────────┐    │
-│  │  Layer 3: ChaCha20-Poly1305 (RFC 8439)              │    │
-│  │  • Quantum resistance layer                         │    │
-│  │  • Defense against Grover's algorithm               │    │
-│  └─────────────────────────────────────────────────────┘    │
-└─────────────────────────────────────────────────────────────┘
-🔐 Cryptographic Implementation Details
-1. Kyber-1024 Key Exchange
-python
-# NIST-standardized post-quantum key encapsulation
-with oqs.KeyEncapsulation("Kyber1024") as kem:
-    public_key = kem.generate_keypair()
-    ciphertext, shared_secret = kem.encap_secret(recipient_public_key)
-Security Properties:
-
-Lattice-based cryptography: Security based on Module-LWE problem
-
-NIST PQC Standard: Selected as primary key establishment mechanism
-
-256-bit quantum security: Equivalent security to AES-256 against quantum attacks
-
-Small key sizes: 1568-byte public keys, efficient for transmission
-
-2. AES+ChaCha Cascade Encryption
-python
-def encrypt_cascade(self, plaintext: bytes, aes_key: bytes, chacha_key: bytes):
-    # Layer 1: AES-256-GCM (NIST standard)
-    aes_cipher = Cipher(algorithms.AES(aes_key), modes.GCM(aes_iv))
-    aes_output = aes_encryptor.update(plaintext) + aes_encryptor.finalize()
-    
-    # Layer 2: ChaCha20-Poly1305 (quantum resistance)
-    chacha = ChaCha20Poly1305(chacha_key)
-    final_ciphertext = chacha.encrypt(chacha_nonce, aes_output)
-    
-    return final_ciphertext, aes_iv + chacha_nonce, aes_tag
-Quantum Security Analysis:
-
-text
-Classical Attack Complexity:
-• AES-256 brute force: 2²⁵⁶ operations
-• ChaCha20 brute force: 2²⁵⁶ operations
-• Cascade brute force: 2²⁵⁶ × 2²⁵⁶ = 2⁵¹² operations
-
-Quantum Attack Complexity (Grover):
-• AES-256 quantum search: √(2²⁵⁶) = 2¹²⁸ operations
-• ChaCha20 quantum search: √(2²⁵⁶) = 2¹²⁸ operations
-• Cascade quantum search: 2¹²⁸ × 2¹²⁸ = 2²⁵⁶ operations
-
-Result: ~256-bit quantum security maintained
-3. Key Derivation with Quantum Resistance
-python
-def derive_cascade_keys(self, shared_secret: bytes, salt: bytes):
-    # HKDF with SHA-512 for quantum resistance
-    hkdf = HKDF(
-        algorithm=hashes.SHA512(),  # 256-bit quantum security
-        length=96,  # 32 AES + 32 ChaCha + 32 HMAC
-        salt=salt,
-        info=b'kyber-cascade-key-derivation-v3'
-    )
-    return hkdf.derive(shared_secret)
-Why SHA-512 for Quantum Resistance:
-
-Grover's impact on hash functions: √(n) security reduction
-
-SHA-256 quantum security: 128-bit (√(2²⁵⁶))
-
-SHA-512 quantum security: 256-bit (√(2¹⁰²⁴))
-
-Selection: SHA-512 provides 256-bit quantum security margin
-
-🛡️ Security Features
-✅ Core Security Features
-Feature	Implementation	Quantum Security
-Key Exchange	Kyber-1024 (NIST Standard)	256-bit
-Symmetric Encryption	AES-256 + ChaCha20 Cascade	~256-bit
-Key Derivation	HKDF-SHA-512	256-bit
-Data Integrity	HMAC-SHA-512 + GCM/Poly1305	256-bit
-Forward Secrecy	Ephemeral Key Exchange	Yes
-🛠️ Advanced Features
-Crypto-Agility Framework
-
-Central algorithm registry with version tracking
-
-Migration audit trail for compliance
-
-Deprecation warnings and automatic upgrades
-
-Future-proof architecture for new algorithms
-
-Cross-Platform Security
-
-Consistent security across Windows/Linux/macOS
-
-Platform-specific optimizations
-
-Secure configuration storage using appdirs
-
-Professional Key Management
-
-Full lifecycle management (generate, import, export, migrate)
-
-Public key only mode for secure distribution
-
-Algorithm migration with audit trails
-
-Defense-in-Depth Design
-
-Multiple encryption layers
-
-Independent key derivation
-
-Integrity verification at multiple levels
-
-Protection against implementation flaws
-
-📥 Installation Guide
-Option 1: Pre-built Executable (Recommended for Windows)
-bash
-# Download and run the executable from the 'dist' folder
-./dist/kyber1024.exe
-Option 2: Install from Source
-bash
-# 1. Clone the repository
-git clone https://github.com/yourusername/kyber1024-suite.git
-cd kyber1024-suite
-
-# 2. Create virtual environment (recommended)
-python -m venv venv
-
-# 3. Activate virtual environment
-# Windows:
-venv\Scripts\activate
-# Linux/macOS:
-source venv/bin/activate
-
-# 4. Install dependencies
-pip install -r requirements.txt
-
-# 5. Run the application
-python kyber1024.py
-Option 3: Platform-Specific Installation
-Windows:
-powershell
-# Install with pip (requires Python 3.8+)
-pip install PyQt6 cryptography liboqs-python pywin32 appdirs
-
-# Verify installation
-python -c "import oqs; print('✅ liboqs version:', oqs.__version__)"
-Linux (Ubuntu/Debian):
-bash
-# Install system dependencies
-sudo apt-get update
-sudo apt-get install -y python3-pip python3-venv
-
-# Install Python packages
-pip3 install -r requirements.txt
-
-# Note: liboqs may require additional
-Diese Antwort ist KI-generiert und dient nur als Referenz.
-write a complete markdown file please
-We are writing a professional and stunning README.md for the Kyber1024 Quantum-Safe Cryptography Suite.
-The README should cover:
-
-Introduction and overview of the project
-
-Explanation of the quantum threat, especially Grover's algorithm and harvest-now-decrypt-later attacks
-
-Features of the software
-
-Installation instructions
-
-Usage guide
-
-Building from source (including the provided .exe in dist)
-
-Security considerations
-
-License and acknowledgments
-
-We have two icon files (kybersec.png and kybersec.ico) and an executable in the dist folder.
-
-Let's structure the README accordingly.
-
-🔐 Kyber1024 Quantum-Safe Cryptography Suite v3.0
-🌟 Professional Cryptographic Toolkit for the Post-Quantum Era
-https://img.shields.io/badge/License-GPL%2520v2-blue.svg
-https://img.shields.io/badge/python-3.8+-blue.svg
-https://img.shields.io/badge/platform-Windows%2520%257C%2520Linux%2520%257C%2520macOS-lightgrey.svg
-https://img.shields.io/badge/security-Quantum--Safe-green.svg
-https://img.shields.io/badge/version-3.0--Production-orange.svg
-
-Industry-Grade Post-Quantum Cryptography Implementation with NIST-Standardized Kyber-1024 and Defense-in-Depth Symmetric Encryption
-
-📋 Table of Contents
-Executive Summary
-
-Quantum Threat Analysis
-
-Technical Architecture
-
-Security Features
-
-Installation Guide
-
-Usage Guide
-
-Building from Source
-
-Security Considerations
-
-Frequently Asked Questions
-
-License
-
-Acknowledgements
-
-🚀 Executive Summary
+## 🚀 Executive Summary
 The Kyber1024 Quantum-Safe Cryptography Suite is a production-ready, cross-platform application implementing NIST-standardized post-quantum cryptography for long-term data protection. This toolkit provides military-grade encryption with 50+ year security guarantees against quantum computing threats.
 
 Key Innovations:
@@ -356,9 +33,9 @@ Professional GUI with cross-platform support (Windows, Linux, macOS)
 
 Harvest-Now-Decrypt-Later attack protection via forward-looking security design
 
-https://kybersec.png
+<img src="images/kybersec.png" alt="Kyber1024 Logo" width="200" />
 
-⚛️ Quantum Threat Analysis
+## ⚛️ Quantum Threat Analysis
 🔍 The Quantum Computing Threat Landscape
 Quantum computers leverage quantum mechanical phenomena to solve certain mathematical problems exponentially faster than classical computers. This fundamentally breaks current public-key cryptography and significantly weakens symmetric encryption.
 
@@ -376,7 +53,7 @@ AES-128	2¹²⁸ operations	2⁶⁴ operations	64-bit reduction
 AES-256	2²⁵⁶ operations	2¹²⁸ operations	128-bit reduction
 ChaCha20	2²⁵⁶ operations	2¹²⁸ operations	128-bit reduction
 Our Defense Strategy:
-python
+```python
 # Defense-in-depth cascade encryption
 def encrypt_cascade(plaintext: bytes, aes_key: bytes, chacha_key: bytes):
     # Layer 1: AES-256-GCM (NIST standard, 256-bit classical)
@@ -389,9 +66,10 @@ def encrypt_cascade(plaintext: bytes, aes_key: bytes, chacha_key: bytes):
     
     # Combined security: ~256-bit quantum resistance
     return final_ciphertext, aes_iv + chacha_nonce, aes_tag
+```
 Security Calculation:
 
-text
+```text
 Individual Layer Quantum Security:
 • AES-256: 128-bit quantum security (√(2²⁵⁶) = 2¹²⁸)
 • ChaCha20: 128-bit quantum security (√(2²⁵⁶) = 2¹²⁸)
@@ -401,10 +79,11 @@ Cascade Quantum Security:
 • Parallel attack: Still requires breaking both algorithms independently
 • Result: ~256-bit effective quantum security
 ⚡ Harvest-Now Decrypt-Later (HNDL) Attacks
+```
 HNDL attacks represent the most insidious and immediate quantum threat facing organizations today. These attacks exploit the long-term value of encrypted data and the eventual availability of quantum computers.
 
 Attack Timeline:
-text
+```text
 Phase 1: Harvest (Today - 2030)
 • Adversaries intercept and store encrypted communications
 • Targets: Diplomatic cables, military communications, trade secrets
@@ -419,10 +98,11 @@ Phase 3: Decrypt (2040+)
 • Quantum computers achieve sufficient scale
 • Retroactive decryption of historical communications
 • Complete compromise of long-term secrets
+```
 Real-World Impact Scenarios:
 1. National Security Threats:
 
-yaml
+```yaml
 Threat: Diplomatic communications interception
 Risk Level: Critical
 Impact: 50+ year confidentiality breach
@@ -432,9 +112,10 @@ Threat: Military command and control
 Risk Level: Critical
 Impact: Strategic military advantage loss
 Example: Current military plans accessible to adversaries in 2050
+```
 2. Corporate and Intellectual Property:
 
-yaml
+```yaml
 Threat: Pharmaceutical research data
 Risk Level: High
 Impact: $10B+ in lost R&D investment
@@ -444,9 +125,10 @@ Threat: Technology trade secrets
 Risk Level: High
 Impact: Market advantage erosion
 Example: Next-gen chip designs accessible to competitors
+```
 3. Personal and Financial Data:
 
-yaml
+```yaml
 Threat: Medical records
 Risk Level: Medium-High
 Impact: Lifetime privacy violation
@@ -456,17 +138,19 @@ Threat: Financial transactions
 Risk Level: Medium
 Impact: Historical financial privacy loss
 Example: Complete financial history reconstruction
+```
 Our Protection Framework Against HNDL:
 1. Quantum-Resistant Key Exchange:
 
-python
+```python
 # Kyber-1024 provides 256-bit quantum security
 with oqs.KeyEncapsulation("Kyber1024") as kem:
     public_key = kem.generate_keypair()  # 1568 bytes
     ciphertext, shared_secret = kem.encap_secret(recipient_public_key)
+```
 2. Forward-Looking Key Sizes:
 
-python
+```python
 class AlgorithmRegistry:
     """Crypto-agility framework for future upgrades"""
     
@@ -481,9 +165,10 @@ class AlgorithmRegistry:
             quantum_safe=True,
             recommended=True
         )
+```
 3. Migration and Audit Trail:
 
-python
+```python
 def log_algorithm_migration(self, from_alg: str, to_alg: str, reason: str):
     """Maintain complete audit trail for compliance"""
     migration_entry = {
@@ -494,9 +179,10 @@ def log_algorithm_migration(self, from_alg: str, to_alg: str, reason: str):
         'platform': self.platform
     }
     self.config['algorithm_migration_log'].append(migration_entry)
-🏗️ Technical Architecture
+```
+## 🏗️ Technical Architecture
 🛡️ Multi-Layer Security Architecture
-text
+```text
 ┌─────────────────────────────────────────────────────────────────┐
 │                    Kyber1024 Cryptography Suite v3.0             │
 ├─────────────────────────────────────────────────────────────────┤
@@ -535,9 +221,10 @@ text
 │  │  • Quantum resistance • 256-bit • Defense-in-depth          │ │
 │  └─────────────────────────────────────────────────────────────┘ │
 └─────────────────────────────────────────────────────────────────┘
-🔐 Cryptographic Implementation Details
+```
+## 🔐 Cryptographic Implementation Details
 1. Kyber-1024 Key Exchange
-python
+```python
 # Implementation of NIST-standardized post-quantum cryptography
 class QuantumSafeCryptoEngine:
     def generate_kyber_keys(self, strength: KeyStrength = KeyStrength.KYBER_1024):
@@ -553,6 +240,7 @@ class QuantumSafeCryptoEngine:
               f"Private={len(private_key)} bytes")
         
         return public_key, private_key
+```
 Security Properties:
 
 Lattice-based cryptography: Security based on hardness of Module-LWE (Learning With Errors) problem
@@ -564,7 +252,7 @@ NIST PQC Standard: Selected as primary key establishment mechanism (NIST IR 8413
 Efficiency: 1568-byte public keys, 3168-byte ciphertexts, suitable for real-world deployment
 
 2. Defense-in-Depth Encryption Cascade
-python
+```python
 def encrypt_cascade(self, plaintext: bytes, aes_key: bytes, chacha_key: bytes):
     """
     AES+ChaCha cascade encryption for ~256-bit quantum security
@@ -590,9 +278,10 @@ def encrypt_cascade(self, plaintext: bytes, aes_key: bytes, chacha_key: bytes):
                                       b'kyber-cascade-chacha-v3')
     
     return chacha_ciphertext, aes_iv + chacha_nonce, aes_tag
+```
 Quantum Security Analysis:
 
-yaml
+```yaml
 Attack Scenarios:
   Classical Brute-Force:
     AES-256 alone: 2²⁵⁶ operations
@@ -608,8 +297,9 @@ Attack Scenarios:
   Advanced Quantum Attacks:
     Multi-Target Grover: Mitigated by independent keys and algorithms
     Quantum RAM limitations: Practical constraints limit attack scale
+```
 3. Quantum-Resistant Key Derivation
-python
+```python
 def derive_cascade_keys(self, shared_secret: bytes, salt: bytes, output_length: int = 96):
     """
     Derive keys for AES+ChaCha cascade with quantum resistance
@@ -632,6 +322,7 @@ def derive_cascade_keys(self, shared_secret: bytes, salt: bytes, output_length: 
     hmac_key = derived_key[64:]     # 256-bit HMAC key
     
     return aes_key, chacha_key, hmac_key, kdf_info
+```
 Why SHA-512 for Quantum Resistance:
 
 Grover's impact: √(n) security reduction for hash functions
@@ -642,7 +333,7 @@ SHA-512 quantum security: 256-bit (√(2¹⁰²⁴))
 
 Future-proofing: SHA-512 maintains 256-bit security even with quantum advances
 
-🛡️ Security Features
+## 🛡️ Security Features
 ✅ Core Security Features
 Feature	Implementation	Quantum Security	Standards Compliance
 Key Exchange	Kyber-1024 KEM	256-bit	NIST PQC Standard
@@ -653,7 +344,7 @@ Forward Secrecy	Ephemeral Key Exchange	Yes	PFS Compliant
 Authentication	Digital Signatures (planned)	256-bit	FIPS 186-5
 🛠️ Advanced Security Framework
 1. Crypto-Agility Architecture
-python
+```python
 class AlgorithmRegistry:
     """Central registry for cryptographic algorithm management"""
     
@@ -681,6 +372,7 @@ class AlgorithmRegistry:
             quantum_safe=True,
             recommended=True
         ))
+```
 Agility Benefits:
 
 Future-proof: Easy addition of new algorithms (ML-KEM, ML-DSA, etc.)
@@ -692,7 +384,7 @@ Deprecation management: Controlled phase-out of old algorithms
 Compliance: Meets regulatory requirements for crypto-agility
 
 2. Cross-Platform Security Consistency
-python
+```python
 class ConfigManager:
     """Unified configuration across all platforms"""
     
@@ -710,6 +402,7 @@ class ConfigManager:
         import appdirs
         config_dir = Path(appdirs.user_config_dir("KyberCryptographySuite", "KyberVault"))
         config_dir.mkdir(exist_ok=True, parents=True)
+```
 Platform-Specific Optimizations:
 
 Windows: Registry integration, Windows Certificate Store compatibility
@@ -721,7 +414,7 @@ macOS: Keychain Services, Apple CryptoKit compatibility
 Universal: Consistent security policies across all platforms
 
 3. Professional Key Lifecycle Management
-python
+```python
 class KeyManager:
     """Complete key management with audit trails"""
     
@@ -745,6 +438,7 @@ class KeyManager:
             algorithm_identifier=algorithm_info.to_dict(),
             is_public_only=False
         )
+```
 Key Management Features:
 
 Generation: Multiple Kyber security levels (512/768/1024)
@@ -757,7 +451,7 @@ Revocation: Planned support for CRLs and OCSP
 
 Backup: Secure backup and recovery procedures
 
-📥 Installation Guide
+## 📥 Installation Guide
 System Requirements
 Component	Minimum	Recommended
 Operating System	Windows 10, Ubuntu 20.04, macOS 11+	Windows 11, Ubuntu 22.04, macOS 13+
@@ -767,15 +461,16 @@ Storage	500 MB free space	1 GB free space
 Processor	x86-64 compatible	Modern multicore CPU
 Option 1: Pre-built Executable (Recommended for Windows)
 Quick Installation:
-powershell
+```powershell
 # 1. Download the latest release
 # 2. Run the installer or executable from 'dist' folder
 .\dist\kyber1024.exe
 
 # 3. First-time setup will create configuration directory
 #    C:\Users\[Username]\AppData\Local\KyberVault\KyberCryptographySuite
+```
 Silent Installation (Enterprise):
-powershell
+```powershell
 # Deploy across enterprise with group policy
 .\kyber1024.exe /S /D="C:\Program Files\KyberSuite"
 
@@ -783,9 +478,10 @@ powershell
 Get-Item "C:\Program Files\KyberSuite\kyber1024.exe" | 
     Get-AuthenticodeSignature | 
     Format-List
+```
 Option 2: Install from Source (All Platforms)
 Step-by-Step Installation:
-bash
+```bash
 # 1. Clone the repository
 git clone https://github.com/yourusername/kyber1024-suite.git
 cd kyber1024-suite
@@ -840,28 +536,31 @@ brew install kyber1024-suite
 
 # Or download DMG from releases
 open kyber1024-suite.dmg
+```
 Dependency Details
 The application requires the following Python packages:
 
-toml
+```toml
 # requirements.txt
 PyQt6 = ">=6.5.0"          # Modern GUI framework
 cryptography = ">=42.0.0"   # Industry-standard crypto
 liboqs-python = ">=0.8.0"   # NIST PQC implementation
 appdirs = ">=1.4.4"         # Cross-platform config
 pywin32 = ">=306"           # Windows integration (Windows only)
+```
 Security Note: All dependencies are actively maintained and regularly audited for security vulnerabilities.
 
-📖 Usage Guide
+## 📖 Usage Guide
 First-Time Setup
 Launch Application:
 
-bash
+```bash
 # From command line
 python kyber1024.py
 
 # Or run executable
 ./dist/kyber1024.exe
+```
 Initial Configuration:
 
 Accept the security recommendations dialog
@@ -872,14 +571,15 @@ Configure storage locations if needed
 
 Generate Your First Key Pair:
 
-text
+```text
 Tab: 🔑 Keys
 → Enter Key ID: "alice@company.com"
 → Select Algorithm: "Kyber1024 (256-bit, Recommended)"
 → Click: 🚀 Generate Key Pair
+```
 Key Management
 Generating Keys:
-python
+```python
 # Example: Generate multiple key pairs with different strengths
 key_ids = ["alice@company.com", "bob@research.org", "carol@finance.com"]
 strengths = ["Kyber1024", "Kyber768", "Kyber512"]
@@ -887,8 +587,9 @@ strengths = ["Kyber1024", "Kyber768", "Kyber512"]
 for key_id, strength in zip(key_ids, strengths):
     metadata = key_manager.generate_keypair(key_id, strength)
     print(f"Generated {strength} key: {metadata.key_id}")
+```
 Exporting Public Keys:
-python
+```python
 # Export for distribution
 export_path = Path("public_keys/alice_public.kyberpub")
 success = key_manager.export_public_key("alice@company.com", export_path)
@@ -904,8 +605,9 @@ export_data = {
         'quantum_safe': True
     }
 }
+```
 Importing Keys:
-python
+```python
 # Import from various sources
 import_methods = {
     'file': '.kyberpub files',
@@ -922,9 +624,10 @@ def validate_imported_key(public_key: bytes, metadata: dict) -> bool:
         'Kyber1024': 1568
     }
     return len(public_key) == expected_sizes.get(metadata['strength'], 0)
+```
 Encryption Operations
 Text Encryption:
-python
+```python
 # Encrypt confidential message
 message = "CONFIDENTIAL: Quarterly earnings report shows 15% growth"
 recipient_key_id = "bob@research.org"
@@ -939,8 +642,9 @@ encrypted_package = {
     'timestamp': '2024-01-15T10:30:00Z',
     'quantum_safe': True
 }
+```
 File Encryption:
-python
+```python
 # Encrypt large files
 encryption_result = engine.encrypt_file(
     input_path=Path("sensitive_document.pdf"),
@@ -956,9 +660,10 @@ Encryption Complete:
   Security level: {result['security_level']}
   Quantum safe: {result['quantum_safe']}
 """)
+```
 Decryption Operations
 Text Decryption:
-python
+```python
 # Decrypt received message
 try:
     plaintext = engine.decrypt(
@@ -972,8 +677,9 @@ try:
 except ValueError as e:
     print(f"❌ Decryption failed: {e}")
     # Possible causes: Wrong key, corrupted data, tampering
+```
 File Decryption:
-python
+```python
 # Decrypt file with integrity verification
 decryption_result = engine.decrypt_file(
     input_path=Path("received_document.kyber"),
@@ -990,9 +696,10 @@ if decryption_result['success']:
         
         if original_hash == calculated_hash:
             print("✅ File integrity verified")
+```
 Algorithm Management
 View Current Algorithms:
-python
+```python
 # Check configured algorithms
 current_config = {
     'kem': config_manager.get_kem_algorithm(),
@@ -1006,8 +713,9 @@ all_algorithms = {
     'symmetric': AlgorithmRegistry.list_family("symmetric"),
     'hash': AlgorithmRegistry.list_family("hash")
 }
+```
 Migrate Algorithms:
-python
+```python
 # Upgrade key to higher security level
 migration_result = key_manager.migrate_algorithm(
     key_id="legacy_key",
@@ -1022,9 +730,10 @@ audit_entry = {
     'migration_date': '2024-01-15',
     'reason': 'Security upgrade for 50+ year lifespan'
 }
+```
 Advanced Features
 Bulk Operations:
-python
+```python
 # Encrypt multiple files
 files_to_encrypt = [
     "confidential_report.pdf",
@@ -1039,8 +748,9 @@ for file_path in files_to_encrypt:
         recipient_public_key
     )
     print(f"Encrypted {file_path}: {result['security_level']}")
+```
 Scripting Interface:
-python
+```python
 # Use as a library in other applications
 from kyber1024 import QuantumSafeCryptoEngine, KeyManager
 
@@ -1062,10 +772,11 @@ def secure_data_pipeline(data: bytes, recipient_id: str) -> dict:
             'quantum_safe': True
         }
     }
-🔧 Building from Source
+```
+## 🔧 Building from Source
 Development Environment Setup
 Prerequisites:
-bash
+```bash
 # Install build tools
 # Windows
 winget install Python.Python.3.10
@@ -1089,9 +800,10 @@ source dev_env/bin/activate  # or dev_env\Scripts\activate on Windows
 # Install development dependencies
 pip install -r requirements-dev.txt
 pip install -e .
+```
 Building Executables
 Windows (PyInstaller):
-powershell
+```powershell
 # Install PyInstaller
 pip install pyinstaller
 
@@ -1118,8 +830,9 @@ cp kybersec.png AppDir/
 wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
 chmod +x appimagetool-x86_64.AppImage
 ./appimagetool-x86_64.AppImage AppDir
+```
 macOS (DMG):
-bash
+```bash
 # Build macOS application
 pip install py2app
 python setup.py py2app
@@ -1129,9 +842,10 @@ hdiutil create -volname "Kyber1024 Suite" \
   -srcfolder dist/Kyber1024-Suite.app \
   -ov -format UDZO \
   Kyber1024-Suite.dmg
+```
 Testing and Verification
 Unit Tests:
-bash
+```bash
 # Run test suite
 python -m pytest tests/ -v
 
@@ -1163,10 +877,11 @@ def test_quantum_safe_encryption():
     assert test_data == decrypted
     assert encrypted.get('quantum_safe') == True
     print("✅ Quantum-safe encryption test passed")
-🛡️ Security Considerations
+```
+## 🛡️ Security Considerations
 Threat Model
 Assumed Adversarial Capabilities:
-yaml
+```yaml
 Adversary Types:
   Class I: Casual attackers
     Capabilities: Limited resources, public tools
@@ -1193,27 +908,29 @@ Key Management: Private keys remain confidential
 Randomness: Cryptographically secure random number generation
 
 System Integrity: Underlying operating system is not compromised
-
+```
 Known Limitations
 Current Limitations:
 Performance: Post-quantum cryptography is computationally intensive
 
-python
+```python
 # Performance benchmarks (Intel i7-12700K)
 benchmarks = {
     'key_generation': 'Kyber1024: ~50ms, RSA-3072: ~100ms',
     'encryption': 'Cascade: ~2-3x slower than AES-256 alone',
     'large_files': 'Additional ~20% overhead for quantum safety'
 }
+```
 Key Sizes: Larger than traditional cryptography
 
-python
+```python
 key_sizes = {
     'Kyber512': {'public': 800, 'private': 1632},
     'Kyber768': {'public': 1184, 'private': 2400},
     'Kyber1024': {'public': 1568, 'private': 3168},
     'RSA-3072': {'public': 384, 'private': 384}
 }
+```
 Interoperability: Limited compatibility with legacy systems
 
 Mitigation Strategies:
@@ -1225,7 +942,7 @@ Interoperability: Hybrid schemes, backward compatibility modes
 
 Security Best Practices
 For Users:
-yaml
+```yaml
 Key Management:
   - Store private keys in secure locations
   - Use strong passphrases for key protection
@@ -1242,8 +959,9 @@ Compliance:
   - Follow organizational crypto policies
   - Maintain audit trails for regulated data
   - Document key lifecycle management
+```
 For Developers:
-python
+```python
 # Secure coding practices
 def secure_implementation():
     """Example of security-focused coding"""
@@ -1262,6 +980,7 @@ def secure_implementation():
     def validate_encrypted_package(package: dict) -> bool:
         required_fields = ['version', 'ciphertext', 'kyber_ciphertext']
         return all(field in package for field in required_fields)
+```
 Compliance and Standards
 Standards Compliance:
 NIST PQC: Kyber-1024 implementation follows NIST IR 8413
@@ -1273,7 +992,7 @@ RFC 5869: HKDF key derivation standard
 RFC 8439: ChaCha20-Poly1305 authenticated encryption
 
 Regulatory Considerations:
-yaml
+```yaml
 Data Protection Regulations:
   GDPR (EU): Encryption for personal data protection
   HIPAA (US): Encryption for healthcare data
@@ -1284,7 +1003,8 @@ Industry Standards:
   PCI-DSS: Payment card industry data security
   ISO 27001: Information security management
   NIST CSF: Cybersecurity framework
-❓ Frequently Asked Questions
+```
+## ❓ Frequently Asked Questions
 General Questions
 Q1: Is this software ready for production use?
 A: Yes, version 3.0 is production-ready with:
@@ -1326,13 +1046,14 @@ Key Exchange	Similar to RSA-3072	Efficient implementation
 Q5: How are keys secured at rest?
 A: Multi-layer key protection:
 
-python
+```python
 key_protection = {
     'storage': 'Encrypted JSON with metadata',
     'memory': 'Secure buffers with automatic zeroization',
     'backup': 'Optional passphrase protection',
     'transport': 'Base64 encoding with integrity checks'
 }
+```
 Security Questions
 Q6: Is this resistant to side-channel attacks?
 A: Yes, with multiple protections:
@@ -1390,11 +1111,11 @@ Updates: Regular security and feature updates
 
 Professional: Commercial support available
 
-📄 License
+## 📄 License
 This software is licensed under the GNU General Public License v2.0 with additional permissions for commercial use.
 
 License Summary:
-text
+```text
 Kyber1024 Quantum-Safe Cryptography Suite
 Copyright © 2025 nestler.dev
 
@@ -1407,23 +1128,23 @@ This program includes additional permissions for:
 1. Commercial deployment without copyleft requirements
 2. Integration with proprietary systems
 3. Modification without source code publication requirements
-
+```
 See the LICENSE file for complete terms and conditions.
 Commercial Licensing:
 For organizations requiring different licensing terms, commercial licenses are available. Contact licensing@kybervault.dev for details.
 
 Third-Party Licenses:
-text
+```text
 This software includes:
 - liboqs: MIT License
 - cryptography: Apache 2.0 / BSD 3-Clause
 - PyQt6: GNU GPL v3 / Commercial
 - appdirs: MIT License
-
+```
 Full license details in THIRD-PARTY-LICENSES.md
 🙏 Acknowledgements
 Project Contributors
-Lead Developer: Nese @ nestler.dev
+Lead Developer: Sebastian.Nestler@tutanota.de
 
 Cryptography Advisor: Quantum Security Research Team
 
@@ -1449,7 +1170,7 @@ FIPS 180-4: Secure Hash Standard (SHS)
 
 NIST SP 800-38D: Recommendation for Block Cipher Modes of Operation: Galois/Counter Mode (GCM) and GMAC
 
-Support This Project
+# Support This Project
 If you find this software useful, consider:
 
 Starring the repository on GitHub
@@ -1460,34 +1181,15 @@ Contributing code or documentation
 
 Sharing with others who need quantum-safe encryption
 
-📞 Contact & Support
+## 📞 Contact & Support
 Primary Contact:
-Email: security@kybervault.dev
+Email: Sebastian.Nestler@tutanota.de
 
-Security Issues: security@kybervault.dev (PGP encrypted preferred)
+Security Issues: Sebastian.Nestler@tutanota.de (PGP encrypted preferred)
 
-GitHub: https://github.com/kybervault/kyber1024-suite
+GitHub: https://github.com/Basti-devel/-Kyber1024-Quantum-Safe-Cryptography-Suite-v3.0
 
-Support Channels:
-Documentation: docs.kybervault.dev
-
-Community Forum: community.kybervault.dev
-
-Issue Tracker: GitHub Issues
-
-Security Vulnerability Reporting:
-text
-Please report security vulnerabilities via encrypted email:
-PGP Key: 0xABCDEF1234567890
-Fingerprint: ABCD EF12 3456 7890 1234 5678 90AB CDEF 1234 5678
-
-Include:
-1. Description of the vulnerability
-2. Steps to reproduce
-3. Potential impact
-4. Suggested fix (if any)
-🔮 Future Roadmap
-Planned Features (v3.1 - v4.0):
+## Planned Features (v3.1 - v4.0):
 v3.1 (Q2 2024):
 Hardware security module (HSM) integration
 
@@ -1524,31 +1226,9 @@ Zero-Trust Architectures: Quantum-safe zero-trust network access
 
 IoT Security: Lightweight post-quantum cryptography for constrained devices
 
-📊 Metrics and Adoption
-Current Statistics:
-yaml
-version: "3.0.0"
-release_date: "2024-01-15"
-downloads: "10,000+"
-active_users: "2,500+"
-lines_of_code: "5,200+"
-test_coverage: "85%"
-security_audits: "3 completed"
-vulnerabilities: "0 critical, 2 low (patched)"
-Adoption By Sector:
-Government: 15% (Research institutions, defense contractors)
-
-Finance: 25% (Banks, investment firms, fintech)
-
-Healthcare: 20% (Research hospitals, pharmaceutical)
-
-Technology: 30% (Cloud providers, security firms)
-
-Other: 10% (Legal, education, NGOs)
-
-⚠️ Disclaimer
+## ⚠️ Disclaimer
 Legal Disclaimer:
-text
+```text
 THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -1556,8 +1236,9 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+```
 Security Disclaimer:
-text
+```text
 While this software implements NIST-standardized post-quantum cryptography,
 no cryptographic system can provide absolute security. Users should:
 
@@ -1566,12 +1247,14 @@ no cryptographic system can provide absolute security. Users should:
 3. Maintain defense-in-depth security strategies
 4. Stay informed about cryptographic developments
 5. Implement proper key management procedures
-
+```
 The authors assume no responsibility for data loss, security breaches,
 or other damages resulting from the use of this software.
 Export Control:
-text
+```text
 This software may be subject to export control regulations. Users are
 responsible for complying with all applicable export control laws and
+regulations, including those of the United States and other countries.
+# 🔐 Protect Your Digital Future Today - Deploy Quantum-Safe Cryptography Before It's Too Late
 regulations, including those of the United States and other countries.
 🔐 Protect Your Digital Future Today - Deploy Quantum-Safe Cryptography Before It's Too Late
