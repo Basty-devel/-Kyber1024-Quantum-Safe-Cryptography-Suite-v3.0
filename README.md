@@ -33,7 +33,7 @@ Professional GUI with cross-platform support (Windows, Linux, macOS)
 
 Harvest-Now-Decrypt-Later attack protection via forward-looking security design
 
-<img src="images/kybersec.png" alt="Kyber1024 Logo" width="200" />
+<img src="kybersec.png" alt="Kyber1024 Logo" width="200" />
 
 ## ⚛️ Quantum Threat Analysis
 🔍 The Quantum Computing Threat Landscape
