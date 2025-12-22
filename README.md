@@ -770,17 +770,25 @@ pip install pyinstaller
 # Install requirements
 pip install -r requirements.txt
 
-pyinstaller --onefile --windowed --clean `
-  --name "Kyber1024-Suite" `
-  --icon "kybersec.ico" `
-  --add-data "kybersec.png;." `
-  --hidden-import "oqs" `
-  --hidden-import "cryptography" `
-  --hidden-import "appdirs" `
-  --hidden-import "PyQt6.QtCore" `
-  --hidden-import "PyQt6.QtGui" `
-  --hidden-import "PyQt6.QtWidgets" `
-  kyber1024.py
+ pyinstaller --clean --onefile --windowed \
+        --name "Kyber1024-Suite" \
+        --hidden-import "PyQt6" \
+        --hidden-import "PyQt6.QtCore" \
+        --hidden-import "PyQt6.QtGui" \
+        --hidden-import "PyQt6.QtWidgets" \
+        --hidden-import "oqs" \
+        --hidden-import "cryptography" \
+        --hidden-import "cryptography.hazmat" \
+        --hidden-import "cryptography.hazmat.primitives" \
+        --hidden-import "cryptography.hazmat.backends" \
+        --hidden-import "cryptography.hazmat.primitives.ciphers" \
+        --hidden-import "cryptography.hazmat.primitives.ciphers.aead" \
+        --hidden-import "cryptography.hazmat.primitives.hashes" \
+        --hidden-import "cryptography.hazmat.primitives.kdf" \
+        --hidden-import "cryptography.hazmat.primitives.hmac" \
+        --hidden-import "appdirs" \
+        --add-data "kybersec.png" \
+        kyber1024.py
 
 # Output will be in dist/Kyber1024-Suite.exe
 Linux (AppImage):
