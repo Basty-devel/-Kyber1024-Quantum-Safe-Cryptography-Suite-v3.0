@@ -377,6 +377,15 @@ class Installer:
                 "--hidden-import", "PyQt6.QtCore",
                 "--hidden-import", "PyQt6.QtGui",
                 "--hidden-import", "PyQt6.QtWidgets",
+                "--hidden-import", "cryptography",
+                "--hidden-import", "cryptography.hazmat",
+                "--hidden-import", "cryptography.hazmat.primitives",
+                "--hidden-import", "cryptography.hazmat.backends",
+                "--hidden-import", "cryptography.hazmat.primitives.ciphers",
+                "--hidden-import", "cryptography.hazmat.primitives.ciphers.aead",
+                "--hidden-import", "cryptography.hazmat.primitives.hashes",
+                "--hidden-import", "cryptography.hazmat.primitives.kdf",
+                "--hidden-import", "cryptography.hazmat.primitives.hmac",
                 "--clean",
                 str(self.project_root / "kyber1024.py")
             ]
@@ -392,6 +401,14 @@ class Installer:
                 "--name", exe_name,
                 "--hidden-import", "oqs",
                 "--hidden-import", "cryptography",
+                "--hidden-import", "cryptography.hazmat",
+                "--hidden-import", "cryptography.hazmat.primitives",
+                "--hidden-import", "cryptography.hazmat.backends",
+                "--hidden-import", "cryptography.hazmat.primitives.ciphers",
+                "--hidden-import", "cryptography.hazmat.primitives.ciphers.aead",
+                "--hidden-import", "cryptography.hazmat.primitives.hashes",
+                "--hidden-import", "cryptography.hazmat.primitives.kdf",
+                "--hidden-import", "cryptography.hazmat.primitives.hmac",
                 "--hidden-import", "appdirs",
                 "--hidden-import", "PyQt6.QtCore",
                 "--hidden-import", "PyQt6.QtGui",
@@ -722,4 +739,5 @@ def main():
         return 1
 
 if __name__ == "__main__":
+
     sys.exit(main())
