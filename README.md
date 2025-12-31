@@ -1,6 +1,4 @@
-# in Construction
-
-<div align="center">
+<div align: "center">
 
 # 🔐 Kyber1024 Quantum-Safe Cryptography Suite v3.0
 
@@ -457,17 +455,21 @@ Backup: Secure backup and recovery procedures
 System Requirements
 Component	Minimum	Recommended
 Operating System	Windows 10, Ubuntu 20.04, macOS 11+	Windows 11, Ubuntu 22.04, macOS 13+
-Python Version	3.8	3.10+
+Python Version	3.10+, Pip
 RAM	4 GB	8 GB
 Storage	500 MB free space	1 GB free space
 Processor	x86-64 compatible	Modern multicore CPU
 
 ## 🚀 Quick Installation
 
-### **One-Line Install (All Platforms):**
+### **One-Line Install Linux/MacOS:**
 ```bash
 # Copy and paste this single command:
-bash <(curl -s https://raw.githubusercontent.com/Basty-devel/-Kyber1024-Quantum-Safe-Cryptography-Suite-v3.0/main/install.sh) || powershell -c "irm https://raw.githubusercontent.com/Basty-devel/-Kyber1024-Quantum-Safe-Cryptography-Suite-v3.0/main/install.ps1 | iex"
+python3 -m venv kyber-env && source kyber-env/bin/activate && pip install liboqs-python cryptography pyqt6 appdirs && python3 kyber1024.py
+```
+### **One-Line Install Windows:**
+```powershell
+python -m venv kyber-env; .\kyber-env\Scripts\Activate; pip install liboqs-python cryptography pyqt6 appdirs; python kyber1024.py
 ```
 ```text
 Kyber1024-Suite/
